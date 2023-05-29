@@ -6,6 +6,7 @@ import SignupPage from './pages/SignupPage';
 import HomePage from './pages/HomePage';
 import BranchPage from './pages/BranchPage';
 import NavBarComponent from './components/NavBarComponent';
+import MenuBar from './components/MenuBar';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
             <Route path="/login" exact element={<LoginPage/>}></Route>
             <Route path="/signup" exact element={<SignupPage/>}></Route>
             <Route path="/home" exact element={<><NavBarComponent/><HomePage/></>}></Route>
-            <Route path="/branch/:id" exact element={<><NavBarComponent/><BranchPage/></>}></Route>
+            <Route path="/branch/:id" exact element={<><NavBarComponent/><MenuBar/><BranchPage/></>}></Route>
 
             </Routes>
     </div>
