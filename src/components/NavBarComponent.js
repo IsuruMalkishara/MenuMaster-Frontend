@@ -1,5 +1,5 @@
 import React, {useState,useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -7,19 +7,20 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import BranchService from '../services/BranchService';
 
 function NavBarComponent() {
-    const [userId, setUserId]=useState('');
+    
     const [branches,setBranches]=useState([]);
-  
-    const { id } = useParams();
+    const navigate = useNavigate();
+
+    
 
   useEffect(() => {
-
-    setUserId(sessionStorage.getItem('userId'));
-    getBranchesByBusinessId();
+    const businessId = sessionStorage.getItem('userId');
+    console.warn('business   '+businessId);
+    getBranchesByBusinessId(businessId);
     
   }, []);
 
-  const getBranchesByBusinessId=()=> {
+  const getBranchesByBusinessId=(id)=> {
     console.warn("business id: "+id);
     BranchService.getBranchesByBusinessId(id).then(res=>{
       console.warn(res.data);
@@ -28,6 +29,12 @@ function NavBarComponent() {
     })
 
   }
+
+   //navigate to branch
+   const navigateToBranch = (id) => {
+    navigate('/branch/'+id);
+  };
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
@@ -35,10 +42,10 @@ function NavBarComponent() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="">Home</Nav.Link>
+            <Nav.Link href="/home">Home</Nav.Link>
             <NavDropdown title="Branches" id="collasible-nav-dropdown">
             {branches.map((branch) => (
-                <NavDropdown.Item key={branch.id} >
+                <NavDropdown.Item key={branch.id} onClick={() => navigateToBranch(branch.id)}>
                   {branch.name}
                 </NavDropdown.Item>
               ))}

@@ -31,7 +31,7 @@ export default function LoginPage() {
         if (res.data.user_id) {
           sessionStorage.setItem('userId', JSON.stringify(res.data.user_id));
           console.log('userId stored in sessionStorage:', res.data.user_id);
-          navigate('/home/'+res.data.user_id);
+          navigate('/home');
         } else {
           console.warn('user_id is null or undefined');
         }

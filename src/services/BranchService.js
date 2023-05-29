@@ -7,6 +7,10 @@ const url='http://localhost:8080/';
     getBranchesByBusinessId(id){ 
         return axios.get(url + "branches/"+id);    
       }
+
+    getBranchById(id){
+      return axios.get(url+"branch/"+id);
+    }  
     
     
 }

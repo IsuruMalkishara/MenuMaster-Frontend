@@ -1,0 +1,21 @@
+.branch{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, rgb(47, 102, 86), rgb(89, 1, 92));
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #ffffff;
+}
+.qr-card {
+    width: 25rem;
+    text-align: center;
+    margin: 20px;
+  }
+
+  .download-btn{
+    margin-top: 10px;
+    background-color: rgb(36, 75, 119) !important;
+    border-radius: 20px !important;
+    width: 250px;
+  }
