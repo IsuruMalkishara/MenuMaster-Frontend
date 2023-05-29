@@ -1,0 +1,31 @@
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, rgb(47, 102, 86), rgb(89, 1, 92));
+  }
+  
+  .login-card {
+    width: 25rem;
+    text-align: center;
+    margin: 20px;
+  }
+
+  .login-btn{
+    margin-top: 10px;
+    background-color: rgb(36, 75, 119) !important;
+    border-radius: 20px !important;
+    width: 150px;
+  }
+
+  .label{
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .input{
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 20px !important;
+    text-align: center;
+    width: 80%;
+  }
