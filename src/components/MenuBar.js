@@ -50,6 +50,10 @@ function MenuBar() {
   const onClickHome=()=>{
     navigate('/branch/'+id);
   }
+
+  const onClickMenu=(mid)=>{
+    navigate('/branch/'+id+'/menu/'+mid);
+  }
   return (
     
             <Navbar bg='light' expand='lg'>
@@ -58,9 +62,9 @@ function MenuBar() {
                 <Navbar.Toggle aria-controls='basic-navbar-nav' />
                 <Navbar.Collapse id='basic-navbar-nav'>
                   <Nav className='me-auto'>
-                    <Nav.Link onClick={() => onClickHome()}>Home</Nav.Link>
+                    <Nav.Link onClick={() => onClickHome()}>Branch</Nav.Link>
                     {menus.map((menu) => (
-                      <Nav.Link key={menu.id} href={`#${menu.id}`}>
+                      <Nav.Link onClick={() => onClickMenu(menu.id)}>
                         {menu.name}
                       </Nav.Link>
                     ))}
