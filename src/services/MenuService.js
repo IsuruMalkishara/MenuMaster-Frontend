@@ -8,6 +8,10 @@ const url='http://localhost:8080/';
         return axios.get(url + "menus/"+id);    
       }
 
+      getMenusById(id){ 
+        return axios.get(url + "menu/"+id);    
+      }
+
     
     
     
