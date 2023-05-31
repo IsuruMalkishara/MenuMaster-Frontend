@@ -10,6 +10,9 @@ const url='http://localhost:3003/';
         return axios.get(url + "subcategories/"+id);    
       }
    
+      getSubCategoryById(id){ 
+        return axios.get( "http://localhost:3003/subcategory/"+id);    
+      }
     
 }
 export default new SubCategoryService

@@ -1,37 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import CategoryService from '../services/CategoryService';
-import SubCategoryService from '../services/SubCategoryService';
-import '../styles/SubCategoryPage.css';
+import ItemService from '../services/ItemService';
+import '../styles/ItemsPage.css';
 
-function SubCategoryPage() {
-  const [subCategories, setSubCategories] = useState([]);
+function ItemPage() {
+  const [items, setItems] = useState([]);
   const [categoryName,setCategoryName]=useState('');
 
-  const { id,mid,cid } = useParams();
-
-  const navigate=useNavigate();
+  const { cid } = useParams();
 
   useEffect(() => {
     getCategoryById();
-    getSubCategoriesByCategoryId();
+    getItemsByCategoryId();
 
   }, []);
 
-  // Get sub categories by category ID
-  const getSubCategoriesByCategoryId = () => {
-    SubCategoryService.getSubCategoriesByCategoryId(cid)
+  // Get items
+  const getItemsByCategoryId = () => {
+    ItemService.getItemsByCategoryId(cid)
       .then((res) => {
         console.warn(res.data);
-        setSubCategories(res.data);
+        setItems(res.data);
       })
       .catch((error) => {
         // Handle error
       });
   };
 
-  //get category by id
+  //get  category by id
   const getCategoryById = () => {
     CategoryService.getCategoryById(cid)
       .then((res) => {
@@ -43,31 +41,30 @@ function SubCategoryPage() {
       });
   };
 
-  //click sub category
-  const handleCardClick=(sid)=>{
-      
-    navigate('/branch/'+id+'/menu/'+mid+'/category/'+cid+'/sub/'+sid);
-      
-  }
 
   return (
-    <div className='sub-category'>
-      <div className='sub-category-content'>
+    <div className='item'>
+      <div className='item-content'>
         <div className='row'>
             <div className='col' style={{ textAlign:'center' }}>
                 <h1>{categoryName}</h1>
             </div>
         </div>
         <div className='row' style={{ margin:'25px' }}>
-          {subCategories.map((category) => (
-            <div key={category.id} className='col' style={{ textAlign:'center' }} onClick={() => handleCardClick(category.id)}
-            role="button">
+          {items.map((item) => (
+            <div key={item.id} className='col' style={{ textAlign:'center' }}>
                 <div >
               <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '35rem' }}>
+              <Card.Img variant="top" src={item.banner_img} />
                 <Card.Body>
                     <div className='row'>
                         <div className='col' style={{ textAlign:'center' }}>
-                            <h3>{category.name}</h3>
+                            <h3>Name: {item.name}</h3>
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className='col' style={{ textAlign:'center' }}>
+                            <h5>Price: RS:{item.price}</h5>
                         </div>
                     </div>
                   
@@ -82,4 +79,4 @@ function SubCategoryPage() {
   );
 }
 
-export default SubCategoryPage;
+export default ItemPage;
