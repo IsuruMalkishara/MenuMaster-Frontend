@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import CategoryService from '../services/CategoryService';
 import MenuService from '../services/MenuService';
+import SubCategoryService from '../services/SubCategoryService';
 import '../styles/MenuPage.css';
 
 function MenuPage() {
   const [categories, setCategories] = useState([]);
   const [menuName,setMenuName]=useState('');
 
-  const { mid } = useParams();
+  const { id,mid } = useParams();
+  
+  const navigate=useNavigate();
 
   useEffect(() => {
     getMenuById();
@@ -41,6 +44,23 @@ function MenuPage() {
       });
   };
 
+  //click category
+  const handleCardClick=(cid)=>{
+    SubCategoryService.getSubCategoriesByCategoryId(cid).then(res=>{
+      console.warn(res.data);
+      
+      console.warn(res.data.length);
+    if(res.data.length!==0){
+      console.warn("Navigate to sub category page");
+    navigate('/branch/'+id+'/menu/'+mid+'/category/'+cid+'/sub');
+    }else{
+      console.warn("Navigate to item page");
+      navigate('/branch/'+id+'/menu/'+mid+'/category/'+cid+'/item');
+    }
+    })
+    
+  }
+
 
   return (
     <div className='menu'>
@@ -50,11 +70,15 @@ function MenuPage() {
                 <h1>{menuName}</h1>
             </div>
         </div>
-        <div className='row' style={{ margin:'20px' }}>
+        <div className='row' style={{ margin:'25px' }}>
           {categories.map((category) => (
-            <div key={category.id} className='col' style={{ textAlign:'center' }}>
+            <div key={category.id}
+            className='col'
+            style={{ textAlign: 'center' }}
+            onClick={() => handleCardClick(category.id)}
+            role="button">
                 <div >
-              <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '25rem' }}>
+              <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '35rem' }}>
                 <Card.Body>
                     <div className='row'>
                         <div className='col' style={{ textAlign:'center' }}>

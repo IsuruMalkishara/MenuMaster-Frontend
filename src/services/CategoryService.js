@@ -8,6 +8,9 @@ const url='http://localhost:8080/';
         return axios.get(url + "categories/"+id);    
       }
 
+      getCategoryById(id){ 
+        return axios.get( "http://localhost:3003/category/"+id);    
+      }
      
     
     

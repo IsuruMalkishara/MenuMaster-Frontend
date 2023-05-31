@@ -8,6 +8,7 @@ import BranchPage from './pages/BranchPage';
 import NavBarComponent from './components/NavBarComponent';
 import MenuBar from './components/MenuBar';
 import MenuPage from './pages/MenuPage';
+import SubCategoryPage from './pages/SubCategoryPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/home" exact element={<><NavBarComponent/><HomePage/></>}></Route>
             <Route path="/branch/:id" exact element={<><NavBarComponent/><MenuBar/><BranchPage/></>}></Route>
             <Route path="/branch/:id/menu/:mid" exact element={<><NavBarComponent/><MenuBar/><MenuPage/></>}></Route>
+            <Route path="/branch/:id/menu/:mid/category/:cid/sub" exact element={<><NavBarComponent/><MenuBar/><SubCategoryPage/></>}></Route>
 
             </Routes>
     </div>
