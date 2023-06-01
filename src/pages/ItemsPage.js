@@ -10,6 +10,7 @@ import ItemService from '../services/ItemService';
 import AddItemPopup from '../components/AddItemPopup';
 import SuccessComponent from '../components/SuccessComponent';
 import DeletePopup from '../components/DeletePopup';
+import UpdateItemPopup from '../components/UpdateItemPopup';
 import '../styles/ItemsPage.css';
 
 function ItemsPage() {
@@ -20,6 +21,8 @@ function ItemsPage() {
   const [isSuccessPopupOpen,setSuccessPopupOpen]=useState(false);
   const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
   const [itemId,setItemId]=useState();
+  const [isUpdatePopupOpen,setUpdatePopupOpen]=useState(false);
+  const [itemToUpdate,setItemToUpdate]=useState(null);
   
 
   const { id,mid,cid,sid } = useParams();
@@ -103,9 +106,49 @@ const closeSuccessPopup=()=>{
 }
 
 //update item
-const handleEditItem=(id)=>{
-
+const handleEditItem=(item)=>{
+setItemToUpdate(item);
+setUpdatePopupOpen(true);
 }
+
+ // Update type
+ const update = (name, price, bannerImg) => {
+  console.log('Updating item with ID: ' + itemToUpdate.id);
+  const businessId=sessionStorage.getItem('userId');
+  const data={
+    "id":itemToUpdate.id,
+    "business":businessId,
+    "branch":id,
+    "menu":mid,
+    "category":cid,
+    "subCategory":sid,
+    "name":name,
+    "price":price,
+    "bannerImg":bannerImg
+     }
+  
+     console.warn(data);
+  // Perform the update action 
+  ItemService.updateItem(id,data).then(res=>{
+      console.log(res.data);
+      if(res.data.result==true){
+          setUpdatePopupOpen(false);
+        setSuccessPopupOpen(true);
+        
+       
+      }
+    })
+  // Close the popup
+  setUpdatePopupOpen(false);
+ 
+};
+
+// ...
+
+// Close update popup
+const closeUpdatePopup = () => {
+  setUpdatePopupOpen(false);
+};
 
 //delete item
 const handleDeleteItem=()=>{
@@ -165,10 +208,10 @@ const confirmDelete = () => {
                     </div>
                     <div className='row'>
                         <div className='col' style={{ textAlign:'center' }}>
-                        <IconButton onClick={() => handleEditItem(id)}>
+                        <IconButton onClick={() => handleEditItem(item)}>
                           <EditIcon />
                         </IconButton>
-                        <IconButton onClick={() => handleDeleteItem(id)}>
+                        <IconButton onClick={() => handleDeleteItem(item.id)}>
                           <DeleteIcon />
                         </IconButton>
                         </div>
@@ -204,6 +247,15 @@ const confirmDelete = () => {
           confirmDelete={confirmDelete}
           closePopup={() => setDeletePopupOpen(false)}
           message="Are you sure, Do you want to delete this Item?"
+        />
+      )}
+{/* update item Popup */}
+{isUpdatePopupOpen && itemToUpdate && (
+        <UpdateItemPopup
+          data={itemToUpdate}
+          update={update}
+          closePopup={closeUpdatePopup}
+          
         />
       )}
     </div>
