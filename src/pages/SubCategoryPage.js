@@ -116,7 +116,6 @@ setUpdatePopupOpen(true);
   
   const data={
     "id":id,
-    "category":cid,
       "name":name,
      }
   
@@ -184,12 +183,11 @@ const confirmDelete = () => {
         </div>
         <div className='row' style={{ margin:'25px' }}>
           {subCategories.map((category) => (
-            <div key={category.id} className='col' style={{ textAlign:'center' }} 
-            role="button">
+            <div key={category.id} className='col' style={{ textAlign:'center' }} >
                 <div >
               <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '35rem' }}>
                 <Card.Body>
-                    <div className='row' onClick={() => handleCardClick(category.id)}>
+                    <div className='row' onClick={() => handleCardClick(category.id)}  role="button">
                         <div className='col' style={{ textAlign:'center' }}>
                             <h3>{category.name}</h3>
                         </div>
@@ -225,7 +223,7 @@ const confirmDelete = () => {
         <AddPopup
           add={add}
           closePopup={closeAddPopup}
-          
+          title="Sub Category"
         />
       )}
 
@@ -234,7 +232,7 @@ const confirmDelete = () => {
         <DeletePopup
           confirmDelete={confirmDelete}
           closePopup={() => setDeletePopupOpen(false)}
-          message="Are you sure, Do you want to delete this Item?"
+          message="Are you sure, Do you want to delete this Sub Category?"
         />
       )}
 {/* update item Popup */}
@@ -243,7 +241,7 @@ const confirmDelete = () => {
           data={categoryToUpdate}
           update={update}
           closePopup={closeUpdatePopup}
-          
+          title="Sub Category"
         />
       )}
     </div>
