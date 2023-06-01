@@ -5,10 +5,15 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import BranchService from '../services/BranchService';
+import AddPopup from '../components/AddPopup';
+import SuccessComponent from '../components/SuccessComponent';
 
 function NavBarComponent() {
     
     const [branches,setBranches]=useState([]);
+    const [isAddPopupOpen, setAddPopupOpen] = useState(false);
+  const [isSuccessPopupOpen,setSuccessPopupOpen]=useState(false);
+
     const navigate = useNavigate();
 
     
@@ -35,7 +40,48 @@ function NavBarComponent() {
     navigate('/branch/'+id);
   };
 
+  const addBranch=()=>{
+console.warn("add popup open");
+setAddPopupOpen(true);
+  }
+
+  // Close add popup
+const closeAddPopup = () => {
+  setAddPopupOpen(false);
+  };
+  
+  //add item
+  const add=(name)=>{
+    const businessID = sessionStorage.getItem('userId');
+    const data={
+      
+      "business":businessID,
+      "name":name,
+     
+    }
+  
+    console.warn(data);
+    BranchService.addBranch(data).then(res=>{
+      console.warn(res.data);
+      if(res.data.result==true){
+        setAddPopupOpen(false);
+      setSuccessPopupOpen(true);
+      
+     
+    }
+    })
+  
+  }
+  
+  //close success popup
+  const closeSuccessPopup=()=>{
+  setSuccessPopupOpen(false);
+  navigate('/home');
+  }
+  
+
   return (
+    <div>
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
         <Navbar.Brand href="#home">MenuMaster</Navbar.Brand>
@@ -50,7 +96,7 @@ function NavBarComponent() {
                 </NavDropdown.Item>
               ))}
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
+              <NavDropdown.Item onClick={() => addBranch()}>
               Add New Branch
               </NavDropdown.Item>
             </NavDropdown>
@@ -64,6 +110,23 @@ function NavBarComponent() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
+    {/* success  Popup */}
+    {isSuccessPopupOpen && (
+        <SuccessComponent
+          message="Successfull"
+          closeSuccessPopup={closeSuccessPopup}
+        />
+      )}
+
+      {/*  Add Popup */}
+      {isAddPopupOpen && (
+        <AddPopup
+          add={add}
+          closePopup={closeAddPopup}
+          title="Branch"
+        />
+      )}
+    </div>
   );
 }
 
