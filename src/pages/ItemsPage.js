@@ -237,7 +237,7 @@ const confirmDelete = () => {
         <AddItemPopup
           add={add}
           closePopup={closeAddPopup}
-          name="Type"
+          
         />
       )}
 
