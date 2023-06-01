@@ -6,7 +6,6 @@ import SignupPage from './pages/SignupPage';
 import HomePage from './pages/HomePage';
 import BranchPage from './pages/BranchPage';
 import NavBarComponent from './components/NavBarComponent';
-import MenuBar from './components/MenuBar';
 import MenuPage from './pages/MenuPage';
 import SubCategoryPage from './pages/SubCategoryPage';
 import ItemsPage from './pages/ItemsPage';
@@ -24,11 +23,11 @@ function App() {
             <Route path="/login" exact element={<LoginPage/>}></Route>
             <Route path="/signup" exact element={<SignupPage/>}></Route>
             <Route path="/home" exact element={<><NavBarComponent/><HomePage/></>}></Route>
-            <Route path="/branch/:id" exact element={<><NavBarComponent/><MenuBar/><BranchPage/></>}></Route>
-            <Route path="/branch/:id/menu/:mid" exact element={<><NavBarComponent/><MenuBar/><MenuPage/></>}></Route>
-            <Route path="/branch/:id/menu/:mid/category/:cid/sub" exact element={<><NavBarComponent/><MenuBar/><SubCategoryPage/></>}></Route>
-            <Route path="/branch/:id/menu/:mid/category/:cid/sub/:sid" exact element={<><NavBarComponent/><MenuBar/><ItemsPage/></>}></Route>
-            <Route path="/branch/:id/menu/:mid/category/:cid/item" exact element={<><NavBarComponent/><MenuBar/><ItemPage/></>}></Route>
+            <Route path="/branch/:id" exact element={<><NavBarComponent/><BranchPage/></>}></Route>
+            <Route path="/branch/:id/menu/:mid" exact element={<><NavBarComponent/><MenuPage/></>}></Route>
+            <Route path="/branch/:id/menu/:mid/category/:cid/sub" exact element={<><NavBarComponent/><SubCategoryPage/></>}></Route>
+            <Route path="/branch/:id/menu/:mid/category/:cid/sub/:sid" exact element={<><NavBarComponent/><ItemsPage/></>}></Route>
+            <Route path="/branch/:id/menu/:mid/category/:cid/item" exact element={<><NavBarComponent/><ItemPage/></>}></Route>
 
 
             </Routes>
