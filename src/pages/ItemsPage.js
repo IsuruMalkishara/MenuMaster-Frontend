@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import SubCategoryService from '../services/SubCategoryService';
 import ItemService from '../services/ItemService';
 import AddItemPopup from '../components/AddItemPopup';
 import SuccessComponent from '../components/SuccessComponent';
+import DeletePopup from '../components/DeletePopup';
 import '../styles/ItemsPage.css';
 
 function ItemsPage() {
@@ -15,6 +18,8 @@ function ItemsPage() {
   const [subCategoryName,setSubCategoryName]=useState('');
   const [isAddPopupOpen, setAddPopupOpen] = useState(false);
   const [isSuccessPopupOpen,setSuccessPopupOpen]=useState(false);
+  const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
+  const [itemId,setItemId]=useState();
   
 
   const { id,mid,cid,sid } = useParams();
@@ -97,6 +102,35 @@ const closeSuccessPopup=()=>{
   navigate('/branch/'+id+'/menu/'+mid+'/category/'+cid+'/sub/'+sid);
 }
 
+//update item
+const handleEditItem=(id)=>{
+
+}
+
+//delete item
+const handleDeleteItem=()=>{
+  console.warn("open delete popup");
+  setItemId(id);
+  setDeletePopupOpen(true);
+}
+
+// Confirm delete
+const confirmDelete = () => {
+  // Perform the delete action
+  // You can use the `vacancyId` variable here to perform the delete action
+  console.log('Deleting item with ID: ' + itemId);
+  // Close the popup
+  setDeletePopupOpen(false);
+  ItemService.deleteItem(itemId).then(res=>{
+    console.log(res.data);
+    if(res.data.result==true){
+      setSuccessPopupOpen(true);
+     
+    }
+  })
+  
+};
+
   return (
     <div className='item'>
       <div className='item-content'>
@@ -129,6 +163,16 @@ const closeSuccessPopup=()=>{
                             <h5>Price: RS:{item.price}</h5>
                         </div>
                     </div>
+                    <div className='row'>
+                        <div className='col' style={{ textAlign:'center' }}>
+                        <IconButton onClick={() => handleEditItem(id)}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton onClick={() => handleDeleteItem(id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                        </div>
+                    </div>
                   
                 </Card.Body>
               </Card>
@@ -151,6 +195,15 @@ const closeSuccessPopup=()=>{
           add={add}
           closePopup={closeAddPopup}
           name="Type"
+        />
+      )}
+
+      {/* Delete item Popup */}
+      {isDeletePopupOpen && (
+        <DeletePopup
+          confirmDelete={confirmDelete}
+          closePopup={() => setDeletePopupOpen(false)}
+          message="Are you sure, Do you want to delete this Item?"
         />
       )}
     </div>

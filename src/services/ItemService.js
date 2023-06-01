@@ -16,6 +16,15 @@ const url='http://localhost:3003/';
       addItem(data){
         return axios.post("http://localhost:3003/item",data);
       }
+
+      updateItem(id,data){
+        return axios.put("http://localhost:3003/item/"+id,data);
+      }
+
+      deleteItem(id){
+        return axios.delete("http://localhost:3003/item/"+id);
+      }
+
     
 }
 export default new ItemService
