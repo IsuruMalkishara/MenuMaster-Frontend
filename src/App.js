@@ -10,6 +10,7 @@ import MenuPage from './pages/MenuPage';
 import SubCategoryPage from './pages/SubCategoryPage';
 import ItemsPage from './pages/ItemsPage';
 import ItemPage from './pages/ItemPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
             <Route path="/branch/:id/menu/:mid/category/:cid/sub" exact element={<><NavBarComponent/><SubCategoryPage/></>}></Route>
             <Route path="/branch/:id/menu/:mid/category/:cid/sub/:sid" exact element={<><NavBarComponent/><ItemsPage/></>}></Route>
             <Route path="/branch/:id/menu/:mid/category/:cid/item" exact element={<><NavBarComponent/><ItemPage/></>}></Route>
-
+            <Route path="/profile" exact element={<><NavBarComponent/><ProfilePage/></>}></Route>
 
             </Routes>
     </div>

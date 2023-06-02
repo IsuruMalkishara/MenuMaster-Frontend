@@ -14,6 +14,10 @@ const url='http://localhost:8080/';
       getUserById(id){
         return axios.get(url+"user/"+id);
       }
+
+      updateUser(id,data){
+        return axios.put('http://localhost:3003/user/'+id,data);
+      }
     
 }
 export default new UserService

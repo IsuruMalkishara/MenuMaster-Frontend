@@ -6,6 +6,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import BranchService from '../services/BranchService';
 import AddPopup from '../components/AddPopup';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SuccessComponent from '../components/SuccessComponent';
 
 function NavBarComponent() {
@@ -79,36 +80,51 @@ const closeAddPopup = () => {
   navigate('/home');
   }
   
+  const logout =()=>{
+sessionStorage.clear();
+navigate('/');
+  }
+
+  const navigateToProfile=()=>{
+    navigate('/profile');
+  }
 
   return (
     <div>
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Container>
-        <Navbar.Brand href="#home">MenuMaster</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/home">Home</Nav.Link>
-            <NavDropdown title="Branches" id="collasible-nav-dropdown">
-            {branches.map((branch) => (
-                <NavDropdown.Item key={branch.id} onClick={() => navigateToBranch(branch.id)}>
-                  {branch.name}
+    <Container>
+          <Navbar.Brand href="#home">MenuMaster</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="/home">Home</Nav.Link>
+              <NavDropdown title="Branches" id="collasible-nav-dropdown">
+                {branches.map((branch) => (
+                  <NavDropdown.Item
+                    key={branch.id}
+                    onClick={() => navigateToBranch(branch.id)}
+                  >
+                    {branch.name}
+                  </NavDropdown.Item>
+                ))}
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={() => addBranch()}>
+                  Add New Branch
                 </NavDropdown.Item>
-              ))}
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={() => addBranch()}>
-              Add New Branch
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-          <Nav>
-            {/* <Nav.Link href="#deets">Profile</Nav.Link> */}
-            <Nav.Link eventKey={2} href="#memes">
-              Profile
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
+              </NavDropdown>
+            </Nav>
+            <Nav>
+              
+              <NavDropdown alignRight title={<AccountCircleIcon />} id="collasible-nav-dropdown">
+              
+                {/* Profile options */}
+                <NavDropdown.Item onClick={() => navigateToProfile()}>Profile</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={() => logout()}>Logout</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
     </Navbar>
     {/* success  Popup */}
     {isSuccessPopupOpen && (
