@@ -4,6 +4,7 @@ import { Card, Button } from 'react-bootstrap';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import GradientIcon from '@mui/icons-material/Gradient';
 import IconButton from '@mui/material/IconButton';
 import jsPDF from 'jspdf';
 import BranchService from '../services/BranchService';
@@ -12,6 +13,8 @@ import AddPopup from '../components/AddPopup';
 import DeletePopup from '../components/DeletePopup';
 import UpdatePopup from '../components/UpdatePopup';
 import SuccessComponent from '../components/SuccessComponent';
+import BackgroundSelector from '../components/BackgroundSelector';
+import BackgroundService from '../services/BackgroundService';
 import '../styles/BranchPage.css';
 
 function BranchPage() {
@@ -27,6 +30,10 @@ function BranchPage() {
   const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
   const [isUpdatePopupOpen,setUpdatePopupOpen]=useState(false);
 
+  const [background,setBackground]=useState('linear-gradient(to right, rgb(47, 102, 86), rgb(89, 1, 92))');
+  const [isBackgroundSelectorOpen,setBackgroundSeletorOpen]=useState(false);
+  const [isDeleteBackgroundPopupOpen,setDeleteBackgroundPopupOpen]=useState(false);
+
   const { id } = useParams();
 
   const navigate=useNavigate();
@@ -34,6 +41,7 @@ function BranchPage() {
   useEffect(() => {
     getBranchDataById();
     getMenusByBranchId();
+    getBackground(id);
   }, []);
 
   const getBranchDataById = () => {
@@ -200,10 +208,81 @@ MenuService.deleteMenu(menuId).then(res=>{
 
 };
 
-  return (
-    <div className='branch'>
-      <div className='branch-content'>
+//get background
+const getBackground=(id)=>{
+  BackgroundService.getBackgrountOfBranch(id).then(res=>{
+    console.warn(res.data.background);
+    setBackground(res.data.background);
+  })
+  }
+
+  //change background 
+  const handleChangeBackground=()=>{
+    console.warn("background selector open");
+ setBackgroundSeletorOpen(true);
+}
+
+// Close change background popup
+const closeBackgroundSelector = () => {
+setBackgroundSeletorOpen(false);
+};
+
+  //change
+  const change=(background)=>{
+   
+    const data={
+      "branch":id,
+      "background":background
+    }
+
+    console.warn(data);
+    BackgroundService.updateBackgroundOfBranch(id, data).then(res=>{
+      console.warn(res.data);
+      if(res.data.result==true){
+        setBackgroundSeletorOpen(false);
+      setSuccessPopupOpen(true);
       
+     
+    }
+    })
+
+  }
+
+  const handleRemoveBackground=()=>{
+    console.warn("open delete popup");
+    setDeleteBackgroundPopupOpen(true);
+  }
+  
+  // Confirm delete
+  const confirmDeleteBackground = () => {
+    // Perform the delete action
+    
+    console.log('Deleting background with ID: ' + id);
+    // Close the popup
+    setDeleteBackgroundPopupOpen(false);
+    BackgroundService.removeBackgroundOfBranch(id).then(res=>{
+      console.log(res.data);
+      if(res.data.result==true){
+        setSuccessPopupOpen(true);
+       
+      }
+    })
+    
+  };
+    
+  return (
+    <div className='branch' style={{ background:background }}>
+      <div className='branch-content'>
+      <div className='row'>
+        <div className='col' style={{ textAlign:'right' }}>
+        <IconButton onClick={() => handleChangeBackground()}>
+                      <GradientIcon />
+            </IconButton>
+            <IconButton onClick={() => handleRemoveBackground()}>
+                      <DeleteIcon />
+            </IconButton>
+        </div>
+       </div>
         <div className='row'>
           <div className='col' style={{ textAlign: 'center' }}>
             <h1> {businessName}</h1>
@@ -306,6 +385,23 @@ MenuService.deleteMenu(menuId).then(res=>{
           title="Category"
         />
       )}
+      {/*  Add Popup */}
+      {isBackgroundSelectorOpen && (
+        <BackgroundSelector
+          change={change}
+          closePopup={closeBackgroundSelector}
+         
+        />
+      )}
+      {/* Delete item Popup */}
+      {isDeleteBackgroundPopupOpen && (
+        <DeletePopup
+          confirmDelete={confirmDeleteBackground}
+          closePopup={() => setDeletePopupOpen(false)}
+          message="Are you sure, Do you want to remove background?"
+        />
+      )}
+
     </div>
   );
 }
