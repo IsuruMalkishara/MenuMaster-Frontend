@@ -14,6 +14,14 @@ const url='http://localhost:8080/';
     addBranch(data){
       return axios.post("http://localhost:3003/branch",data);
     }
+
+    updateBranch(id,data){
+      return axios.put("http://localhost:3003/branch/"+id,data);
+    }
+
+    deleteBranch(id){
+      return axios.delete("http://localhost:3003/branch/"+id);
+    }
     
 }
 export default new BranchService

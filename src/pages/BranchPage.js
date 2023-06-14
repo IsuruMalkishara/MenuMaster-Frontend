@@ -150,7 +150,7 @@ const update = (id,name) => {
 
 const data={
   "id":id,
-    "name":name,
+  "name":name,
    }
 
    console.warn(data);
@@ -200,7 +200,6 @@ MenuService.deleteMenu(menuId).then(res=>{
 
 };
 
-
   return (
     <div className='branch'>
       <div className='branch-content'>
@@ -212,11 +211,11 @@ MenuService.deleteMenu(menuId).then(res=>{
           </div>
         </div>
         <div className='row'>
-          <div className='col' style={{ textAlign: 'center' }}>
+          <div className='col d-flex justify-content-center' >
             <Card className='qr-card' style={{ backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '25rem' }}>
               <Card.Body>
                 <div className='row'>
-                  <div className='col' style={{ textAlign: 'center' }}>
+                  <div className='col' style={{ textAlign:'center' }}>
                     <img src={qrCode} alt='QR Code' height={'100px'} width={'100px'} />
                   </div>
                 </div>

@@ -4,16 +4,25 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
 import BranchService from '../services/BranchService';
 import AddPopup from '../components/AddPopup';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SuccessComponent from '../components/SuccessComponent';
+import DeletePopup from '../components/DeletePopup';
+import UpdatePopup from '../components/UpdatePopup';
 
 function NavBarComponent() {
     
     const [branches,setBranches]=useState([]);
     const [isAddPopupOpen, setAddPopupOpen] = useState(false);
   const [isSuccessPopupOpen,setSuccessPopupOpen]=useState(false);
+  const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
+  const [isUpdatePopupOpen,setUpdatePopupOpen]=useState(false);
+  const [branchToUpdate,setBranchToUpdate]=useState(null);
+  const [branchId,setBranchId]=useState(0);
 
     const navigate = useNavigate();
 
@@ -89,6 +98,67 @@ navigate('/');
     navigate('/profile');
   }
 
+  //update item
+const handleEdit=(branch)=>{
+  setBranchToUpdate(branch);
+  setUpdatePopupOpen(true);
+  }
+  
+  // Update type
+  const update = (id,name) => {
+  
+  const data={
+    "id":id,
+    "name":name,
+     }
+  
+     console.warn(data);
+  // Perform the update action 
+  BranchService.updateBranch(id,data).then(res=>{
+      console.log(res.data);
+      if(res.data.result==true){
+          setUpdatePopupOpen(false);
+        setSuccessPopupOpen(true);
+        
+       
+      }
+    })
+  // Close the popup
+  setUpdatePopupOpen(false);
+  
+  };
+  
+  // ...
+  
+  // Close update popup
+  const closeUpdatePopup = () => {
+  setUpdatePopupOpen(false);
+  };
+  
+  //delete item
+  const handleDelete=(bid)=>{
+  console.warn("open delete popup");
+  setBranchId(bid);
+  setDeletePopupOpen(true);
+  }
+  
+  // Confirm delete
+  const confirmDelete = () => {
+  // Perform the delete action
+  console.log('Deleting branch with ID: ' + branchId);
+  // Close the popup
+  setDeletePopupOpen(false);
+  BranchService.deleteBranch(branchId).then(res=>{
+    console.log(res.data);
+    if(res.data.result==true){
+      setSuccessPopupOpen(true);
+     
+    }
+  })
+  
+  };
+  
+
   return (
     <div>
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -105,6 +175,12 @@ navigate('/');
                     onClick={() => navigateToBranch(branch.id)}
                   >
                     {branch.name}
+                    <IconButton onClick={() => handleEdit(branch)}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton onClick={() => handleDelete(branch.id)}>
+                          <DeleteIcon />
+                        </IconButton>
                   </NavDropdown.Item>
                 ))}
                 <NavDropdown.Divider />
@@ -139,6 +215,24 @@ navigate('/');
         <AddPopup
           add={add}
           closePopup={closeAddPopup}
+          title="Branch"
+        />
+      )}
+
+      {/* Delete branch Popup */}
+      {isDeletePopupOpen && (
+        <DeletePopup
+          confirmDelete={confirmDelete}
+          closePopup={() => setDeletePopupOpen(false)}
+          message="Are you sure, Do you want to delete this Branch?"
+        />
+      )}
+{/* update branch Popup */}
+{isUpdatePopupOpen && branchToUpdate && (
+        <UpdatePopup
+          data={branchToUpdate}
+          update={update}
+          closePopup={closeUpdatePopup}
           title="Branch"
         />
       )}

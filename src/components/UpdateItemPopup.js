@@ -38,10 +38,10 @@ const handleBannerImgChange = (files) => {
         <Modal.Body style={{ textAlign: 'center' }}>
           
           <div className='row' style={{ marginTop: '10px' }}>
-            <div className='col'>
+            <div className='col-4' style={{ textAlign:'left' }}>
               <Form.Label>NAME</Form.Label>
             </div>
-            <div className='col'>
+            <div className='col-8'>
               <Form.Control
                 className='input'
                 type="text"
@@ -51,10 +51,10 @@ const handleBannerImgChange = (files) => {
             </div>
           </div>
           <div className='row' style={{ marginTop: '10px' }}>
-            <div className='col'>
+            <div className='col-4' style={{ textAlign:'left' }}>
               <Form.Label>PRICE</Form.Label>
             </div>
-            <div className='col'>
+            <div className='col-8'>
               <Form.Control
                 className='input'
                 type="text"
@@ -64,10 +64,10 @@ const handleBannerImgChange = (files) => {
             </div>
           </div>
           <div className='row' style={{ marginTop: '10px' }}>
-            <div className='col'>
+            <div className='col-4' style={{ textAlign:'left' }}>
               <Form.Label>BANNER IMAGE</Form.Label>
             </div>
-            <div className='col'>
+            <div className='col-8'>
               <Form.Control
                 className='input'
                 type="file"
@@ -78,10 +78,10 @@ const handleBannerImgChange = (files) => {
           </div>
         </Modal.Body>
         <Modal.Footer style={{ textAlign: 'center' }}>
-          <Button variant="secondary" onClick={closePopup}>
+          <Button variant="secondary" onClick={closePopup} style={{ width:'100px' }}>
             Cancel
           </Button>
-          <Button onClick={handleUpdate}>Update</Button>
+          <Button onClick={handleUpdate} style={{ width:'100px' }}>Update</Button>
         </Modal.Footer>
       </Modal>
     </div>

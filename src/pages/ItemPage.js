@@ -199,7 +199,7 @@ const confirmDelete = () => {
                     </div>
                     <div className='row'>
                         <div className='col' style={{ textAlign:'center' }}>
-                            <h5>Price: RS:{item.price}</h5>
+                            <h5>Price: LKR:{item.price}</h5>
                         </div>
                     </div>
                     <div className='row'>

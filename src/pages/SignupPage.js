@@ -11,25 +11,15 @@ export default function SignupPage() {
     const [email, setEmail]=useState('');
     const [phone, setPhone]=useState('');
     const [name,setName]=useState('');
-    const [logo, setLogo]=useState(''); 
     const [password,setPassword]=useState('');
     const [confirmPassword,setConfirmPassword]=useState('');
     const [isSuccessPopupOpen,setSuccessPopupOpen]=useState(false);
     const [error, setError] = useState('');
    
 
-//add logo
-const handleLogoChange = (files) => {
-  
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setLogo(event.target.result);
-    };
-    reader.readAsDataURL(files[0]);
-  
-};
 
-//update
+
+//add
 const handleAdd=(event)=>{
     event.preventDefault();
     if(!name){
@@ -56,10 +46,7 @@ const handleAdd=(event)=>{
     }else if(!confirmPassword){
       setError(' Confirm Password is required.');
       return;
-    }else if(!logo){
-        setError(' Logo is required.');
-        return;
-      }else if (password !== confirmPassword) {
+    }else if (password !== confirmPassword) {
       setError('Confirm Password should be match with Password.');
       return;
     }else{
@@ -68,7 +55,7 @@ const handleAdd=(event)=>{
    "email":email,
    "phone":phone,
    "password":password,
-   "logo":logo
+   
   }
 
   console.warn(data);
@@ -158,28 +145,12 @@ const closeSuccessPopup=()=>{
           /></div>
         </div>  
 
-        <div className="row" style={{ marginTop: '10px' }}>
-  <div className="col-4">
-    <Form.Label className="label">Logo:</Form.Label>
-  </div>
-  <div className="col-8">
-    <Form.Control
-    className='input'
-      type="file"
-      accept="image/*"
-      onChange={(event) => handleLogoChange(event.target.files)}
-    />
-  </div>
-</div>
-
-
-      
-    
+          
 
 <div className='row' style={{ marginTop:'10px' }}>
   <div className='col' style={{ textAlign:'center' }}>
   <Button className='save-btn' variant="primary" type="submit" >
-            SAVE
+            SIGNUP
   </Button>
 
   </div>

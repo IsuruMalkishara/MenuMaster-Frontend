@@ -8,11 +8,13 @@ const AddItemPopup = ({ add, closePopup }) => {
   
   const [name, setName] = useState('');
   const [price,setPrice]=useState();
+  const [discount,setDiscount]=useState('');
   const [bannerImg,setBannerImg]=useState('');
   const [error, setError] = useState('');
 
+
   const handleAdd = () => {
-    if (!name || !price || !bannerImg) {
+    if (!name || !price || !discount || !bannerImg) {
       setError('Please fill in all fields.');
       return;
     }
@@ -34,8 +36,12 @@ const handleBannerImgChange = (files) => {
     <div style={{ backgroundColor: 'rgb(3, 122, 126)' }}>
       <Modal show={true} onHide={closePopup}>
         <Modal.Header closeButton style={{ textAlign: 'center' }}>
-        
-          <Modal.Title style={{ textAlign: 'center' }}>Add Item</Modal.Title>
+        <div className='row'>
+          <div className='col' style={{ textAlign:'center' }}>
+          <Modal.Title style={{ textAlign: 'center' }}><h3>Add Item</h3></Modal.Title>
+          </div>
+        </div>
+          
         </Modal.Header>
         <Modal.Body style={{ textAlign: 'center' }}>
           <div className='row'>
@@ -44,10 +50,10 @@ const handleBannerImgChange = (files) => {
             </div>
           </div>
           <div className='row' style={{ marginTop: '10px' }}>
-            <div className='col'>
+            <div className='col-4' style={{ textAlign:'left' }}>
               <Form.Label>NAME</Form.Label>
             </div>
-            <div className='col'>
+            <div className='col-8'>
               <Form.Control
                 className='input'
                 type="text"
@@ -57,10 +63,10 @@ const handleBannerImgChange = (files) => {
             </div>
           </div>
           <div className='row' style={{ marginTop: '10px' }}>
-            <div className='col'>
+            <div className='col-4' style={{ textAlign:'left' }}>
               <Form.Label>PRICE</Form.Label>
             </div>
-            <div className='col'>
+            <div className='col-8'>
               <Form.Control
                 className='input'
                 type="text"
@@ -70,10 +76,23 @@ const handleBannerImgChange = (files) => {
             </div>
           </div>
           <div className='row' style={{ marginTop: '10px' }}>
-            <div className='col'>
+            <div className='col-4' style={{ textAlign:'left' }}>
+              <Form.Label>DISCOUNT</Form.Label>
+            </div>
+            <div className='col-8'>
+              <Form.Control
+                className='input'
+                type="text"
+                value={discount}
+                onChange={(e) => setDiscount(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className='row' style={{ marginTop: '10px' }}>
+            <div className='col-4' style={{ textAlign:'left' }}>
               <Form.Label>BANNER IMAGE</Form.Label>
             </div>
-            <div className='col'>
+            <div className='col-8'>
               <Form.Control
                 className='input'
                 type="file"
@@ -84,10 +103,15 @@ const handleBannerImgChange = (files) => {
           </div>
         </Modal.Body>
         <Modal.Footer style={{ textAlign: 'center' }}>
-          <Button variant="secondary" onClick={closePopup}>
+          <div className='row'>
+            <div className='col' style={{ textAlign:'center' }}>
+            <Button variant="secondary" onClick={closePopup} style={{ width:'100px',margin:'10px' }}>
             Cancel
           </Button>
-          <Button onClick={handleAdd}>Add</Button>
+          <Button onClick={handleAdd} style={{ width:'100px',margin:'10px' }}>Add</Button>
+            </div>
+          </div>
+          
         </Modal.Footer>
       </Modal>
     </div>

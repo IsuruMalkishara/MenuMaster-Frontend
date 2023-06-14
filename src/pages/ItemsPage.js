@@ -190,7 +190,7 @@ const confirmDelete = () => {
             </div>
         </div>
         <div className='row' style={{ margin:'25px' }}>
-          {items.map((item) => (
+        {items && items.map((item) => (
             <div key={item.id} className='col' style={{ textAlign:'center' }}>
                 <div >
               <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '20rem' }}>
@@ -203,7 +203,7 @@ const confirmDelete = () => {
                     </div>
                     <div className='row'>
                         <div className='col' style={{ textAlign:'center' }}>
-                            <h5>Price: RS:{item.price}</h5>
+                            <h5>Price: LKR:{item.price}</h5>
                         </div>
                     </div>
                     <div className='row'>
