@@ -8,11 +8,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import BranchService from '../services/BranchService';
-import AddPopup from '../components/AddPopup';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SuccessComponent from '../components/SuccessComponent';
 import DeletePopup from '../components/DeletePopup';
-import UpdatePopup from '../components/UpdatePopup';
+import AddBranchPopup from './AddBranchPopup';
+import UpdateBranchPopup from './UpdateBranchPopup';
 
 function NavBarComponent() {
     
@@ -73,7 +73,7 @@ const closeAddPopup = () => {
     console.warn(data);
     BranchService.addBranch(data).then(res=>{
       console.warn(res.data);
-      if(res.data.result==true){
+      if(res.data==true){
         setAddPopupOpen(false);
       setSuccessPopupOpen(true);
       
@@ -116,7 +116,7 @@ const handleEdit=(branch)=>{
   // Perform the update action 
   BranchService.updateBranch(id,data).then(res=>{
       console.log(res.data);
-      if(res.data.result==true){
+      if(res.data==true){
           setUpdatePopupOpen(false);
         setSuccessPopupOpen(true);
         
@@ -150,7 +150,7 @@ const handleEdit=(branch)=>{
   setDeletePopupOpen(false);
   BranchService.deleteBranch(branchId).then(res=>{
     console.log(res.data);
-    if(res.data.result==true){
+    if(res.data==true){
       setSuccessPopupOpen(true);
      
     }
@@ -212,7 +212,7 @@ const handleEdit=(branch)=>{
 
       {/*  Add Popup */}
       {isAddPopupOpen && (
-        <AddPopup
+        <AddBranchPopup
           add={add}
           closePopup={closeAddPopup}
           title="Branch"
@@ -229,7 +229,7 @@ const handleEdit=(branch)=>{
       )}
 {/* update branch Popup */}
 {isUpdatePopupOpen && branchToUpdate && (
-        <UpdatePopup
+        <UpdateBranchPopup
           data={branchToUpdate}
           update={update}
           closePopup={closeUpdatePopup}

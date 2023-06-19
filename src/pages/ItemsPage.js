@@ -11,6 +11,7 @@ import AddItemPopup from '../components/AddItemPopup';
 import SuccessComponent from '../components/SuccessComponent';
 import DeletePopup from '../components/DeletePopup';
 import UpdateItemPopup from '../components/UpdateItemPopup';
+import BackgroundService from '../services/BackgroundService';
 import '../styles/ItemsPage.css';
 
 function ItemsPage() {
@@ -23,6 +24,8 @@ function ItemsPage() {
   const [itemId,setItemId]=useState();
   const [isUpdatePopupOpen,setUpdatePopupOpen]=useState(false);
   const [itemToUpdate,setItemToUpdate]=useState(null);
+
+  const [background,setBackground]=useState('linear-gradient(to right, rgb(47, 102, 86), rgb(89, 1, 92))');
   
 
   const { id,mid,cid,sid } = useParams();
@@ -31,7 +34,7 @@ function ItemsPage() {
 
   useEffect(() => {
    
-    
+    getBackground(id);
     getSubCategoryById();
     getItemsBySubCategoryId();
 
@@ -73,7 +76,7 @@ setAddPopupOpen(false);
 };
 
   //add item
-  const add=(name,price,bannerImg)=>{
+  const add=(name,price,bannerImg,discount)=>{
     const businessId=sessionStorage.getItem('userId');
     const data={
       "business":businessId,
@@ -83,13 +86,14 @@ setAddPopupOpen(false);
       "subCategory":sid,
       "name":name,
       "price":price,
-      "bannerImg":bannerImg
+      "bannerImg":bannerImg,
+      "discount":discount
     }
 
     console.warn(data);
     ItemService.addItem(data).then(res=>{
       console.warn(res.data);
-      if(res.data.result==true){
+      if(res.data==true){
         setAddPopupOpen(false);
       setSuccessPopupOpen(true);
       
@@ -97,6 +101,17 @@ setAddPopupOpen(false);
     }
     })
 
+  }
+
+  //get background
+const getBackground=(id)=>{
+  BackgroundService.getBackgrountOfBranch(id).then(res=>{
+    console.warn(res.data.background);
+    if(res.data.background!==null){
+      setBackground(res.data.background);
+    }
+   
+  })
   }
 
   //close success popup
@@ -112,7 +127,7 @@ setUpdatePopupOpen(true);
 }
 
  // Update type
- const update = (name, price, bannerImg) => {
+ const update = (name, price, bannerImg,discount) => {
   console.log('Updating item with ID: ' + itemToUpdate.id);
   const businessId=sessionStorage.getItem('userId');
   const data={
@@ -124,14 +139,15 @@ setUpdatePopupOpen(true);
     "subCategory":sid,
     "name":name,
     "price":price,
-    "bannerImg":bannerImg
+    "bannerImg":bannerImg,
+    "discount":discount
      }
   
      console.warn(data);
   // Perform the update action 
   ItemService.updateItem(id,data).then(res=>{
       console.log(res.data);
-      if(res.data.result==true){
+      if(res.data==true){
           setUpdatePopupOpen(false);
         setSuccessPopupOpen(true);
         
@@ -151,9 +167,9 @@ const closeUpdatePopup = () => {
 };
 
 //delete item
-const handleDeleteItem=()=>{
+const handleDeleteItem=(itemId)=>{
   console.warn("open delete popup");
-  setItemId(id);
+  setItemId(itemId);
   setDeletePopupOpen(true);
 }
 
@@ -166,7 +182,7 @@ const confirmDelete = () => {
   setDeletePopupOpen(false);
   ItemService.deleteItem(itemId).then(res=>{
     console.log(res.data);
-    if(res.data.result==true){
+    if(res.data==true){
       setSuccessPopupOpen(true);
      
     }
@@ -175,7 +191,10 @@ const confirmDelete = () => {
 };
 
   return (
-    <div className='item'>
+    <div className='item' 
+    style={{
+      background: background.startsWith('#') ? background : `url(${background}) center center / cover no-repeat`,
+    }}>
       <div className='item-content'>
       <div className='row'>
             <div className='col' style={{ textAlign:'center' }}>
@@ -194,7 +213,7 @@ const confirmDelete = () => {
             <div key={item.id} className='col' style={{ textAlign:'center' }}>
                 <div >
               <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '20rem' }}>
-              <Card.Img variant="top" src={item.banner_img} />
+              <Card.Img variant="top" src={item.bannerImg} style={{ height: '20rem' }}/>
                 <Card.Body>
                     <div className='row'>
                         <div className='col' style={{ textAlign:'center' }}>
@@ -204,6 +223,11 @@ const confirmDelete = () => {
                     <div className='row'>
                         <div className='col' style={{ textAlign:'center' }}>
                             <h5>Price: LKR:{item.price}</h5>
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className='col' style={{ textAlign:'center' }}>
+                            <h5>Discount: {item.discount}%</h5>
                         </div>
                     </div>
                     <div className='row'>
@@ -227,7 +251,7 @@ const confirmDelete = () => {
        {/* success  Popup */}
        {isSuccessPopupOpen && (
         <SuccessComponent
-          message="Successfully added new item"
+          message="Successful"
           closeSuccessPopup={closeSuccessPopup}
         />
       )}

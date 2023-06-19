@@ -3,6 +3,7 @@ import {  useNavigate } from 'react-router-dom';
 import { Card,Button,Alert,Form } from 'react-bootstrap';
 import UserService from '../services/UserService';
 import SuccessComponent from '../components/SuccessComponent';
+import BackgroundService from '../services/BackgroundService';
 import '../styles/EditProfilePage.css';
 
 export default function ProfilePage() {
@@ -16,6 +17,8 @@ export default function ProfilePage() {
 
   const [isSuccessPopupOpen,setSuccessPopupOpen]=useState(false);
 
+  const [background,setBackground]=useState('linear-gradient(to right, rgb(47, 102, 86), rgb(89, 1, 92))');
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +26,7 @@ export default function ProfilePage() {
     const userId=sessionStorage.getItem('userId');
     console.warn("user "+userId);
     getUserById(userId);
-
+    getBackground(userId);
   }, []);
 
   const getUserById=(id)=>{
@@ -37,6 +40,15 @@ export default function ProfilePage() {
     })
   }
 
+  //get background
+  const getBackground=(id)=>{
+    BackgroundService.getBackground(id).then(res=>{
+      console.warn(res.data.background);
+      if(res.data.background!==null){
+      setBackground(res.data.background);
+      }
+    })
+    }
   const editProfile=(event)=>{
     event.preventDefault();
     if(!name){
@@ -57,6 +69,7 @@ export default function ProfilePage() {
         }else{
 
             const data={  
+              "id":id,
                 "name":name,
                 "email":email,
                 "phone":phone,
@@ -67,7 +80,7 @@ export default function ProfilePage() {
 
 UserService.updateUser(id,data).then(res=>{
     console.warn(res.data);
-    if(res.data.result===true){
+    if(res.data===true){
         setSuccessPopupOpen(true);
     }
 })
@@ -98,7 +111,9 @@ const closeSuccessPopup=()=>{
     navigate('/profile');
   }
   return (
-    <div className='profile'>
+    <div className='profile' style={{
+      background: background.startsWith('#') ? background : `url(${background}) center center / cover no-repeat`,
+    }}>
       <Card className='profile-card' style={{ backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '25rem' }}>
         <Card.Body>
         {error && <Alert variant='danger'>{error}</Alert>} {/* Display error message */}

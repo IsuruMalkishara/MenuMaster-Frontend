@@ -4,10 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 
-const AddPopup = ({ add, closePopup, title }) => {
+const AddBranchPopup = ({ add, closePopup, title }) => {
  
   const [name, setName] = useState('');
-  const [bannerImg,setBannerImg]=useState('');
   const [error, setError] = useState('');
 
   const handleAdd = () => {
@@ -15,19 +14,8 @@ const AddPopup = ({ add, closePopup, title }) => {
       setError('Please fill in all fields.');
       return;
     }
-    add(name,bannerImg);
+    add(name);
   };
-
-  //add banner img
-const handleBannerImgChange = (files) => {
-  
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    setBannerImg(event.target.result);
-  };
-  reader.readAsDataURL(files[0]);
-
-};
 
   return (
     <div style={{ backgroundColor: 'rgb(3, 122, 126)' }}>
@@ -56,19 +44,7 @@ const handleBannerImgChange = (files) => {
               />
             </div>
           </div>
-          <div className='row' style={{ marginTop: '10px' }}>
-            <div className='col-4' style={{ textAlign:'left' }}>
-              <Form.Label>Banner Image</Form.Label>
-            </div>
-            <div className='col-8'>
-              <Form.Control
-                className='input'
-                type="file"
-                accept="image/*"
-                onChange={(event) => handleBannerImgChange(event.target.files)}
-              />
-            </div>
-          </div>
+          
         </Modal.Body>
         <Modal.Footer style={{ textAlign: 'center' }}>
           <Button variant="secondary" onClick={closePopup} style={{ width:'100px' }}>
@@ -81,4 +57,4 @@ const handleBannerImgChange = (files) => {
   );
 };
 
-export default AddPopup;
+export default AddBranchPopup;

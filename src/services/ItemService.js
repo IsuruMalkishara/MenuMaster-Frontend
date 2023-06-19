@@ -1,28 +1,28 @@
 import axios from "axios";
 
 
-const url='http://localhost:3003/';
+const url='http://localhost:8080/';
 
  class ItemService {
 
     getItemsBySubCategoryId(id){ 
-        return axios.get("http://localhost:3003/sub/"+id+"/item");    
+        return axios.get(url+"sub/"+id+"/item");    
       }
 
       getItemsByCategoryId(id){ 
-        return axios.get("http://localhost:3003/category/"+id+"/item");    
+        return axios.get(url+"category/"+id+"/item");    
       }
    
       addItem(data){
-        return axios.post("http://localhost:3003/item",data);
+        return axios.post(url+"item",data);
       }
 
       updateItem(id,data){
-        return axios.put("http://localhost:3003/item/"+id,data);
+        return axios.put(url+"item/"+id,data);
       }
 
       deleteItem(id){
-        return axios.delete("http://localhost:3003/item/"+id);
+        return axios.delete(url+"item/"+id);
       }
 
     

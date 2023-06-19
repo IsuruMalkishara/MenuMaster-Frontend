@@ -119,19 +119,18 @@ setAddPopupOpen(false);
 };
 
 //add item
-const add=(name)=>{
+const add=(name,bannerImg)=>{
   
-  const data={
-    
+  const data={ 
     "branch":id,
     "name":name,
-   
+    "bannerImg":bannerImg
   }
 
   console.warn(data);
   MenuService.addMenu(data).then(res=>{
     console.warn(res.data);
-    if(res.data.result==true){
+    if(res.data==true){
       setAddPopupOpen(false);
     setSuccessPopupOpen(true);
     
@@ -154,18 +153,20 @@ setUpdatePopupOpen(true);
 }
 
 // Update type
-const update = (id,name) => {
+const update = (id,name,bannerImg) => {
 
 const data={
   "id":id,
   "name":name,
+  "bannerImg":bannerImg,
+  
    }
 
    console.warn(data);
 // Perform the update action 
 MenuService.updateMenu(id,data).then(res=>{
     console.log(res.data);
-    if(res.data.result==true){
+    if(res.data==true){
         setUpdatePopupOpen(false);
       setSuccessPopupOpen(true);
       
@@ -200,7 +201,7 @@ console.log('Deleting menu with ID: ' + menuId);
 setDeletePopupOpen(false);
 MenuService.deleteMenu(menuId).then(res=>{
   console.log(res.data);
-  if(res.data.result==true){
+  if(res.data==true){
     setSuccessPopupOpen(true);
    
   }
@@ -212,7 +213,10 @@ MenuService.deleteMenu(menuId).then(res=>{
 const getBackground=(id)=>{
   BackgroundService.getBackgrountOfBranch(id).then(res=>{
     console.warn(res.data.background);
-    setBackground(res.data.background);
+    if(res.data.background!==null){
+      setBackground(res.data.background);
+    }
+   
   })
   }
 
@@ -231,14 +235,14 @@ setBackgroundSeletorOpen(false);
   const change=(background)=>{
    
     const data={
-      "branch":id,
+      "id":id,
       "background":background
     }
 
     console.warn(data);
     BackgroundService.updateBackgroundOfBranch(id, data).then(res=>{
       console.warn(res.data);
-      if(res.data.result==true){
+      if(res.data==true){
         setBackgroundSeletorOpen(false);
       setSuccessPopupOpen(true);
       
@@ -262,7 +266,7 @@ setBackgroundSeletorOpen(false);
     setDeleteBackgroundPopupOpen(false);
     BackgroundService.removeBackgroundOfBranch(id).then(res=>{
       console.log(res.data);
-      if(res.data.result==true){
+      if(res.data==true){
         setSuccessPopupOpen(true);
        
       }
@@ -271,7 +275,10 @@ setBackgroundSeletorOpen(false);
   };
     
   return (
-    <div className='branch' style={{ background:background }}>
+    <div className='branch' 
+    style={{
+      background: background.startsWith('#') ? background : `url(${background}) center center / cover no-repeat`,
+    }}>
       <div className='branch-content'>
       <div className='row'>
         <div className='col' style={{ textAlign:'right' }}>
@@ -292,6 +299,7 @@ setBackgroundSeletorOpen(false);
         <div className='row'>
           <div className='col d-flex justify-content-center' >
             <Card className='qr-card' style={{ backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '25rem' }}>
+              
               <Card.Body>
                 <div className='row'>
                   <div className='col' style={{ textAlign:'center' }}>
@@ -325,7 +333,10 @@ setBackgroundSeletorOpen(false);
             style={{ textAlign: 'center' }}
             >
                 <div >
-              <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '35rem' }}>
+              <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '20rem' }}>
+              {menu.bannerImg && (
+  <Card.Img variant="top" src={menu.bannerImg} style={{ height: '20rem' }} />
+)}
                 <Card.Body>
                     <div className='row' onClick={() => handleCardClick(menu.id)}
             role="button">

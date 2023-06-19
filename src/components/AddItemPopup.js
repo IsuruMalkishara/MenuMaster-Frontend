@@ -8,17 +8,20 @@ const AddItemPopup = ({ add, closePopup }) => {
   
   const [name, setName] = useState('');
   const [price,setPrice]=useState();
-  const [discount,setDiscount]=useState('');
+  const [discount,setDiscount]=useState(0);
   const [bannerImg,setBannerImg]=useState('');
   const [error, setError] = useState('');
 
 
   const handleAdd = () => {
-    if (!name || !price || !discount || !bannerImg) {
-      setError('Please fill in all fields.');
+    if (!name || !price || !bannerImg) {
+      setError('Name, Price and Banner Image field are can not be empty');
+      return;
+    }else if(discount <0 || discount >100){
+      setError('Enter valid value for discount');
       return;
     }
-    add(name, price, bannerImg);
+    add(name, price, bannerImg,discount);
   };
 
   //add banner img

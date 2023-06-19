@@ -30,7 +30,9 @@ function HomePage() {
   const getBackground=(id)=>{
   BackgroundService.getBackground(id).then(res=>{
     console.warn(res.data.background);
+    if(res.data.background!==null){
     setBackground(res.data.background);
+    }
   })
   }
 
@@ -49,14 +51,14 @@ setBackgroundSeletorOpen(false);
   const change=(background)=>{
     const businessId=sessionStorage.getItem('userId');
     const data={
-      "business":businessId,
+      "id":businessId,
       "background":background
     }
 
     console.warn(data);
     BackgroundService.updateBackground(businessId, data).then(res=>{
       console.warn(res.data);
-      if(res.data.result==true){
+      if(res.data==true){
         setBackgroundSeletorOpen(false);
       setSuccessPopupOpen(true);
       
@@ -86,7 +88,7 @@ const confirmDelete = () => {
   setDeletePopupOpen(false);
   BackgroundService.removeBackground(businessId).then(res=>{
     console.log(res.data);
-    if(res.data.result==true){
+    if(res.data==true){
       setSuccessPopupOpen(true);
      
     }
@@ -95,7 +97,10 @@ const confirmDelete = () => {
 };
   
   return (
-    <div className='home' style={{ background:background }}>
+    <div className='home' 
+    style={{
+      background: background.startsWith('#') ? background : `url(${background}) center center / cover no-repeat`,
+    }}>
       <div className='home-content'>
        <div className='row'>
         <div className='col' style={{ textAlign:'right' }}>

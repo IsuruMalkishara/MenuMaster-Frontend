@@ -4,6 +4,7 @@ import { Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import UserService from '../services/UserService';
+import BackgroundService from '../services/BackgroundService';
 import '../styles/ProfilePage.css';
 
 export default function ProfilePage() {
@@ -12,6 +13,7 @@ export default function ProfilePage() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [logo, setLogo] = useState('');
+  const [background,setBackground]=useState('linear-gradient(to right, rgb(47, 102, 86), rgb(89, 1, 92))');
 
   const navigate = useNavigate();
 
@@ -20,6 +22,7 @@ export default function ProfilePage() {
     const userId=sessionStorage.getItem('userId');
     console.warn("user "+userId);
     getUserById(userId);
+    getBackground(userId);
 
   }, []);
 
@@ -33,12 +36,25 @@ export default function ProfilePage() {
     })
   }
 
+  //get background
+  const getBackground=(id)=>{
+    BackgroundService.getBackground(id).then(res=>{
+      console.warn(res.data.background);
+      if(res.data.background!==null){
+      setBackground(res.data.background);
+      }
+    })
+    }
+    
   const handleEdit=()=>{
     navigate('/profile/edit');
   }
 
   return (
-    <div className='profile'>
+    <div className='profile'
+    style={{
+      background: background.startsWith('#') ? background : `url(${background}) center center / cover no-repeat`,
+    }}>
       <Card className='profile-card' style={{ backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '25rem' }}>
         <Card.Body>
         <div className='row'>

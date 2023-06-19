@@ -16,7 +16,7 @@ const url='http://localhost:8080/';
       }
 
       updateUser(id,data){
-        return axios.put('http://localhost:3003/user/'+id,data);
+        return axios.put(url+'user/'+id,data);
       }
     
 }

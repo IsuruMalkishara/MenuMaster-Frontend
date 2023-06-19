@@ -8,10 +8,13 @@ import IconButton from '@mui/material/IconButton';
 import CategoryService from '../services/CategoryService';
 import MenuService from '../services/MenuService';
 import SubCategoryService from '../services/SubCategoryService';
+import ItemService from '../services/ItemService';
 import AddPopup from '../components/AddPopup';
 import DeletePopup from '../components/DeletePopup';
 import UpdatePopup from '../components/UpdatePopup';
 import SuccessComponent from '../components/SuccessComponent';
+import SubCategoryOrItemPopup from '../components/SubCategoryOrItemPopup';
+import BackgroundService from '../services/BackgroundService';
 import '../styles/MenuPage.css';
 
 function MenuPage() {
@@ -24,12 +27,19 @@ function MenuPage() {
   const [isSuccessPopupOpen,setSuccessPopupOpen]=useState(false);
   const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
   const [isUpdatePopupOpen,setUpdatePopupOpen]=useState(false);
+  const [isSubOrItemOpen,setSubOrItemOpen]=useState(false);
+
+  const [subCategoryList,setSubCategoryList]=useState([]);
+  const [itemList,setItemList]=useState([]);
+
+  const [background,setBackground]=useState('linear-gradient(to right, rgb(47, 102, 86), rgb(89, 1, 92))');
 
   const { id,mid } = useParams();
   
   const navigate=useNavigate();
 
   useEffect(() => {
+    getBackground(id);
     getMenuById();
     getCategoriesByMenuId();
 
@@ -59,22 +69,70 @@ function MenuPage() {
       });
   };
 
+  //get subcategories by category id
+  const getSubCategoriesByCategoryId=(id)=>{
+SubCategoryService.getSubCategoriesByCategoryId(id).then(res=>{
+  console.warn(res.data);
+  setSubCategoryList(res.data);
+})
+  }
+
+  //get item by category id
+  const getItemsByCategoryId=(id)=>{
+ItemService.getItemsByCategoryId(id).then(res=>{
+  console.warn(res.data);
+  setItemList(res.data);
+})
+  }
+
+  //get background
+const getBackground=(id)=>{
+  BackgroundService.getBackgrountOfBranch(id).then(res=>{
+    console.warn(res.data.background);
+    if(res.data.background!==null){
+      setBackground(res.data.background);
+    }
+   
+  })
+  }
+
   //click category
   const handleCardClick=(cid)=>{
-    SubCategoryService.getSubCategoriesByCategoryId(cid).then(res=>{
-      console.warn(res.data);
-      
-      console.warn(res.data.length);
-    if(res.data.length!==0){
+    getItemsByCategoryId(cid);
+    getSubCategoriesByCategoryId(cid);
+
+
+    
+    if(subCategoryList.length!==0){
       console.warn("Navigate to sub category page");
     navigate('/branch/'+id+'/menu/'+mid+'/category/'+cid+'/sub');
-    }else{
+    }else if (itemList.length!==0){
       console.warn("Navigate to item page");
       navigate('/branch/'+id+'/menu/'+mid+'/category/'+cid+'/item');
+    }else{
+      setSubOrItemOpen(true);
+      setCategoryId(cid);
     }
-    })
+   
     
   }
+
+  const choose=(result)=>{
+   console.warn("result "+result);
+   
+    if(result=="item"){
+      navigate('/branch/'+id+'/menu/'+mid+'/category/'+categoryId+'/item');
+      
+    }else{
+      navigate('/branch/'+id+'/menu/'+mid+'/category/'+categoryId+'/sub');
+    }
+ setSubOrItemOpen(false);
+  }
+
+  // Close  popup
+const closePopup = () => {
+  setSubOrItemOpen(false);
+  };
 
 //add popup open
 const handleAdd=()=>{
@@ -100,7 +158,7 @@ const add=(name)=>{
   console.warn(data);
   CategoryService.addCategory(data).then(res=>{
     console.warn(res.data);
-    if(res.data.result==true){
+    if(res.data==true){
       setAddPopupOpen(false);
     setSuccessPopupOpen(true);
     
@@ -134,7 +192,7 @@ const data={
 // Perform the update action 
 CategoryService.updateCategory(id,data).then(res=>{
     console.log(res.data);
-    if(res.data.result==true){
+    if(res.data==true){
         setUpdatePopupOpen(false);
       setSuccessPopupOpen(true);
       
@@ -169,7 +227,7 @@ console.log('Deleting category with ID: ' + categoryId);
 setDeletePopupOpen(false);
 CategoryService.deleteCategory(categoryId).then(res=>{
   console.log(res.data);
-  if(res.data.result==true){
+  if(res.data==true){
     setSuccessPopupOpen(true);
    
   }
@@ -177,7 +235,10 @@ CategoryService.deleteCategory(categoryId).then(res=>{
 
 };
   return (
-    <div className='menu'>
+    <div className='menu' 
+    style={{
+      background: background.startsWith('#') ? background : `url(${background}) center center / cover no-repeat`,
+    }}>
       <div className='menu-content'>
         <div className='row'>
             <div className='col' style={{ textAlign:'center' }}>
@@ -198,7 +259,10 @@ CategoryService.deleteCategory(categoryId).then(res=>{
             style={{ textAlign: 'center' }}
             >
                 <div >
-              <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '35rem' }}>
+              <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '20rem' }}>
+              {category.bannerImg && (
+  <Card.Img variant="top" src={category.bannerImg} style={{ height: '20rem' }} />
+)}
                 <Card.Body>
                     <div className='row' onClick={() => handleCardClick(category.id)}
             role="button">
@@ -256,6 +320,14 @@ CategoryService.deleteCategory(categoryId).then(res=>{
           update={update}
           closePopup={closeUpdatePopup}
           title="Category"
+        />
+      )}
+
+      {/*  Add Popup */}
+      {isSubOrItemOpen && (
+        <SubCategoryOrItemPopup
+          choose={choose}
+          closePopup={closePopup}
         />
       )}
     </div>

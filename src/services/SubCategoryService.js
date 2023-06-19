@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const url='http://localhost:3003/';
+const url='http://localhost:8080/';
 
  class SubCategoryService {
 
@@ -11,19 +11,19 @@ const url='http://localhost:3003/';
       }
    
       getSubCategoryById(id){ 
-        return axios.get( "http://localhost:3003/subcategory/"+id);    
+        return axios.get( url+"subcategory/"+id);    
       }
 
       addSubCategory(data){
-        return axios.post("http://localhost:3003/subcategory",data);
+        return axios.post(url+"subcategory",data);
       }
 
       updateSubCategory(id,data){
-        return axios.put("http://localhost:3003/subcategory/"+id,data);
+        return axios.put(url+"subcategory/"+id,data);
       }
 
       deleteSubCategory(id){
-        return axios.delete("http://localhost:3003/subcategory/"+id);
+        return axios.delete(url+"subcategory/"+id);
       }
     
 }

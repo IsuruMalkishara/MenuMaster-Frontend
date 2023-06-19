@@ -9,20 +9,20 @@ const url='http://localhost:8080/';
       }
 
       getCategoryById(id){ 
-        return axios.get( "http://localhost:3003/category/"+id);    
+        return axios.get( url+"category/"+id);    
       }
      
     
       addCategory(data){
-        return axios.post("http://localhost:3003/category",data);
+        return axios.post(url+"category",data);
       }
 
       updateCategory(id,data){
-        return axios.put("http://localhost:3003/category/"+id,data);
+        return axios.put(url+"category/"+id,data);
       }
 
       deleteCategory(id){
-        return axios.delete("http://localhost:3003/category/"+id);
+        return axios.delete(url+"category/"+id);
       }
     
 }

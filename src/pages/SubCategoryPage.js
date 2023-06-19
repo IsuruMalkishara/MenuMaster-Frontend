@@ -11,6 +11,7 @@ import AddPopup from '../components/AddPopup';
 import DeletePopup from '../components/DeletePopup';
 import UpdatePopup from '../components/UpdatePopup';
 import SuccessComponent from '../components/SuccessComponent';
+import BackgroundService from '../services/BackgroundService';
 import '../styles/SubCategoryPage.css';
 
 function SubCategoryPage() {
@@ -24,11 +25,14 @@ function SubCategoryPage() {
   const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
   const [isUpdatePopupOpen,setUpdatePopupOpen]=useState(false);
 
+  const [background,setBackground]=useState('linear-gradient(to right, rgb(47, 102, 86), rgb(89, 1, 92))');
+
   const { id,mid,cid } = useParams();
 
   const navigate=useNavigate();
 
   useEffect(() => {
+    getBackground(id);
     getCategoryById();
     getSubCategoriesByCategoryId();
 
@@ -57,6 +61,17 @@ function SubCategoryPage() {
         // Handle error
       });
   };
+
+    //get background
+const getBackground=(id)=>{
+  BackgroundService.getBackgrountOfBranch(id).then(res=>{
+    console.warn(res.data.background);
+    if(res.data.background!==null){
+      setBackground(res.data.background);
+    }
+   
+  })
+  }
 
   //click sub category
   const handleCardClick=(sid)=>{
@@ -89,7 +104,7 @@ setAddPopupOpen(false);
     console.warn(data);
     SubCategoryService.addSubCategory(data).then(res=>{
       console.warn(res.data);
-      if(res.data.result==true){
+      if(res.data==true){
         setAddPopupOpen(false);
       setSuccessPopupOpen(true);
       
@@ -123,7 +138,7 @@ setUpdatePopupOpen(true);
   // Perform the update action 
   SubCategoryService.updateSubCategory(id,data).then(res=>{
       console.log(res.data);
-      if(res.data.result==true){
+      if(res.data==true){
           setUpdatePopupOpen(false);
         setSuccessPopupOpen(true);
         
@@ -158,7 +173,7 @@ const confirmDelete = () => {
   setDeletePopupOpen(false);
   SubCategoryService.deleteSubCategory(categoryId).then(res=>{
     console.log(res.data);
-    if(res.data.result==true){
+    if(res.data==true){
       setSuccessPopupOpen(true);
      
     }
@@ -167,7 +182,10 @@ const confirmDelete = () => {
 };
 
   return (
-    <div className='sub-category'>
+    <div className='sub-category' 
+    style={{
+      background: background.startsWith('#') ? background : `url(${background}) center center / cover no-repeat`,
+    }}>
       <div className='sub-category-content'>
         <div className='row'>
             <div className='col' style={{ textAlign:'center' }}>
@@ -185,7 +203,10 @@ const confirmDelete = () => {
           {subCategories.map((category) => (
             <div key={category.id} className='col' style={{ textAlign:'center' }} >
                 <div >
-              <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '35rem' }}>
+              <Card className='category-card' style={{backgroundColor: 'rgba(255, 255, 255, 0.301)', width: '20rem' }}>
+              {category.bannerImg && (
+  <Card.Img variant="top" src={category.bannerImg} style={{ height: '20rem' }} />
+)}
                 <Card.Body>
                     <div className='row' onClick={() => handleCardClick(category.id)}  role="button">
                         <div className='col' style={{ textAlign:'center' }}>

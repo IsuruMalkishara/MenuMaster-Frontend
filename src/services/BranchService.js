@@ -12,15 +12,15 @@ const url='http://localhost:8080/';
       return axios.get(url+"branch/"+id);
     }  
     addBranch(data){
-      return axios.post("http://localhost:3003/branch",data);
+      return axios.post(url+"branch",data);
     }
 
     updateBranch(id,data){
-      return axios.put("http://localhost:3003/branch/"+id,data);
+      return axios.put(url+"branch/"+id,data);
     }
 
     deleteBranch(id){
-      return axios.delete("http://localhost:3003/branch/"+id);
+      return axios.delete(url+"branch/"+id);
     }
     
 }
