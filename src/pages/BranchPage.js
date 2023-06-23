@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import GradientIcon from '@mui/icons-material/Gradient';
 import IconButton from '@mui/material/IconButton';
 import jsPDF from 'jspdf';
+import QRCode from 'qrcode.react';
 import BranchService from '../services/BranchService';
 import MenuService from '../services/MenuService';
 import AddPopup from '../components/AddPopup';
@@ -34,9 +35,15 @@ function BranchPage() {
   const [isBackgroundSelectorOpen,setBackgroundSeletorOpen]=useState(false);
   const [isDeleteBackgroundPopupOpen,setDeleteBackgroundPopupOpen]=useState(false);
 
+  const qrCodeValue = qrCode; // Replace with your QR code value
+  const canvasRef = useRef(null);
+  const version = 10;
+
   const { id } = useParams();
 
   const navigate=useNavigate();
+
+
 
   useEffect(() => {
     getBranchDataById();
@@ -49,8 +56,9 @@ function BranchPage() {
     BranchService.getBranchById(id)
       .then((res) => {
         console.warn(res.data);
+        console.warn("qr code: "+res.data.qrcode);
         setBranchName(res.data.name);
-        setQrCode(res.data.qrCode);
+        setQrCode(res.data.qrcode);
         setBusinessName(res.data.business.name);
       })
       .catch((error) => {
@@ -70,37 +78,27 @@ const getMenusByBranchId = () => {
     });
 };
 
-  const handleDownload = () => {
-    console.warn('download');
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    const img = new Image();
 
-    img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      context.drawImage(img, 0, 0, img.width, img.height);
+  
 
-      // Draw branchName and businessName on the canvas
-      context.fillStyle = '#000000';
-      context.font = '20px Arial';
-      context.fillText(businessName, 10, img.height - 30);
-      context.fillText(branchName, 10, img.height - 20);
+  const downloadImage = () => {
+    console.warn("Download qr code");
+    const canvas = document.getElementById('qrcode-canvas');
+    const dataURL = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = 'qrcode.png';
+    link.click();
 
-      const dataUrl = canvas.toDataURL('image/png');
-
-      // Create a PDF document
-      const pdf = new jsPDF();
-      pdf.addImage(dataUrl, 'PNG', 10, 10, 190, img.height * (190 / img.width));
-
-      // Download the PDF file
-      pdf.save(`${branchName}_${businessName}.pdf`);
-    };
-
-    img.src = qrCode;
+    console.warn("Downloaded qr code");
   };
 
+  
+  
+
   //click sub category
+  
+  
   const handleCardClick=(mid)=>{
       
     navigate('/branch/'+id+'/menu/'+mid);
@@ -303,16 +301,20 @@ setBackgroundSeletorOpen(false);
               <Card.Body>
                 <div className='row'>
                   <div className='col' style={{ textAlign:'center' }}>
-                    <img src={qrCode} alt='QR Code' height={'100px'} width={'100px'} />
+                  <QRCode id="qrcode-canvas" value={qrCode} size={200} level="L" qrStyle="dots" qrVersion={version} />
                   </div>
+                
+      
                 </div>
                 <div className='row'>
                   <div className='col' style={{ textAlign: 'center' }}>
-                    <Button className='download-btn' variant='primary' type='submit' onClick={handleDownload}>
+                    <Button className='download-btn' variant='primary' type='submit' onClick={downloadImage}>
                       Download QR Code
                     </Button>
                   </div>
                 </div>
+                
+                
               </Card.Body>
             </Card>
           </div>
