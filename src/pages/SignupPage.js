@@ -3,6 +3,8 @@ import { useNavigate,Link } from 'react-router-dom';
 import { Card, Form, Button,Alert } from 'react-bootstrap';
 import SuccessComponent from '../components/SuccessComponent';
 import UserService from '../services/UserService';
+import VerificationComponent from '../components/VerificationComponent';
+import VerificationService from '../services/VerificationService';
 import '../styles/SignupPage.css';
 
 export default function SignupPage() {
@@ -16,7 +18,8 @@ export default function SignupPage() {
     const [isSuccessPopupOpen,setSuccessPopupOpen]=useState(false);
     const [error, setError] = useState('');
    
-
+    const [isVerificationComponentOpen, setVarificationComponentOpen] = useState(false);
+    
 
 
 //add
@@ -63,7 +66,7 @@ const handleAdd=(event)=>{
     console.warn(res.data);
     if(res.data==true){
 
-      setSuccessPopupOpen(true);
+      setVarificationComponentOpen(true);
       
     }
   })
@@ -75,6 +78,30 @@ const validateEmail = (email) => {
   const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   return regex.test(email);
 };
+
+//enter verification code
+//add item
+const send=(code)=>{
+  
+  
+
+  console.warn(code);
+  VerificationService.verify(code).then(res=>{
+    console.warn(res.data);
+    if(res.data==true){
+    setVarificationComponentOpen(false);
+    setSuccessPopupOpen(true);
+    
+   
+  }
+  })
+
+}
+
+//close verification component
+const closeVerificationComponent=()=>{
+  setVarificationComponentOpen(false);
+}
 
 //close success popup
 const closeSuccessPopup=()=>{
@@ -171,6 +198,15 @@ const closeSuccessPopup=()=>{
         <SuccessComponent
           message="Successfully Registered with MenuMaster"
           closeSuccessPopup={closeSuccessPopup}
+        />
+      )}
+
+      {/*  Add Popup */}
+      {isVerificationComponentOpen && (
+        <VerificationComponent
+          send={send}
+          closePopup={closeVerificationComponent}
+          
         />
       )}
     </>
