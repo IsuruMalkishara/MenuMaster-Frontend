@@ -117,7 +117,7 @@ setAddPopupOpen(false);
   //close success popup
 const closeSuccessPopup=()=>{
   setSuccessPopupOpen(false);
-  navigate('/branch/'+id+'/menu/'+mid+'/category/'+cid+'/sub');
+  window.location.reload();
 }
 
 //update item

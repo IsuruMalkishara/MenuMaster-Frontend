@@ -71,7 +71,8 @@ setBackgroundSeletorOpen(false);
   //close success popup
 const closeSuccessPopup=()=>{
   setSuccessPopupOpen(false);
-  navigate('/home');
+  window.location.reload();
+  
 }
 
 const handleRemoveBackground=()=>{

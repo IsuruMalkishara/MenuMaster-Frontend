@@ -114,7 +114,7 @@ const getBackground=(id)=>{
   //close success popup
 const closeSuccessPopup=()=>{
   setSuccessPopupOpen(false);
-  navigate('/branch/'+id+'/menu/'+mid+'/category/'+cid+'/item');
+  window.location.reload();
 }
 
 //update item

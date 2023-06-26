@@ -18,6 +18,14 @@ const url='http://localhost:8080/';
       updateUser(id,data){
         return axios.put(url+'user/'+id,data);
       }
+
+      forgotPassowrd(email){
+        return axios.post(url+"forgot",email);
+      }
+
+      resetPassword(password){
+        return axios.post(url+'reset',password);
+      }
     
 }
 export default new UserService

@@ -171,7 +171,7 @@ const add=(name)=>{
 //close success popup
 const closeSuccessPopup=()=>{
 setSuccessPopupOpen(false);
-navigate('/branch/'+id+'/menu/'+mid);
+window.location.reload();
 }
 
 //update item

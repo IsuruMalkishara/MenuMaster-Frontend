@@ -3,42 +3,32 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
-import { Link } from 'react-router-dom';
-import VerificationService from '../services/VerificationService';
 
-const VerificationComponent = ({ send, closePopup }) => {
+
+const EmailComponent = ({ send, closePopup }) => {
  
-  const [code, setCode] = useState();
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
-  const handleAdd = () => {
-    if (!code ) {
-      setError('Please fill in all fields.');
+  const handleOk = () => {
+    if (!email ) {
+      setError('Please enter email.');
       return;
     }
-    send(code);
+    send(email);
   };
 
-  const resend=()=>{
-    VerificationService.requestForResend().then(res=>{
-        console.warn(res.data);
-        
-    })
-  }
+  
 
   return (
     <div style={{ backgroundColor: 'rgb(3, 122, 126)' }}>
       <Modal show={true} onHide={closePopup}>
         <Modal.Header closeButton style={{ textAlign: 'center' }}>
         
-          <Modal.Title style={{ textAlign: 'center' }}>Verification Code</Modal.Title>
+          <Modal.Title style={{ textAlign: 'center' }}>Enter Your Email Address</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ textAlign: 'center' }}>
-        <div className='row'>
-            <div className='col' style={{ textAlign:'center' }}>
-            <p>Please check your email and enter Verification code here</p>
-            </div>
-          </div>
+        
           <div className='row'>
             <div className='col'>
             {error && <Alert variant='danger' style={{ textAlign:'center' }}>{error}</Alert>} {/* Display error message */}
@@ -47,36 +37,30 @@ const VerificationComponent = ({ send, closePopup }) => {
           
           <div className='row' style={{ marginTop: '10px' }}>
             <div className='col-4' style={{ textAlign:'left' }}>
-              <Form.Label>Verification Code</Form.Label>
+              <Form.Label>Email Address</Form.Label>
             </div>
             <div className='col-8'>
               <Form.Control
                 className='input'
                 type="text"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
 
-          <div className='row' style={{ marginTop: '10px' }}>
-            <div className='col' style={{ textAlign:'left' }}>
-              <Link onClick={resend}><p>Resend Verification Code</p></Link>
-            </div>
-            
-            
-          </div>
+          
           
         </Modal.Body>
         <Modal.Footer style={{ textAlign: 'center' }}>
           <Button variant="secondary" onClick={closePopup} style={{ width:'100px' }}>
             Cancel
           </Button>
-          <Button onClick={handleAdd} style={{ width:'100px' }}>Verify</Button>
+          <Button onClick={handleOk} style={{ width:'100px' }}>Ok</Button>
         </Modal.Footer>
       </Modal>
     </div>
   );
 };
 
-export default VerificationComponent;
+export default EmailComponent;

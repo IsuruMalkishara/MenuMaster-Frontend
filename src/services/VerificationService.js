@@ -9,6 +9,10 @@ const url='http://localhost:8080/';
         return axios.post(url+'verify',code);
     }
 
+    verifyEmail(code){
+        return axios.post(url+'password/verify',code);
+    }
+
     requestForResend(){
         return axios.get(url+'resend');
     }

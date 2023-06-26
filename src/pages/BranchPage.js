@@ -141,7 +141,7 @@ const add=(name,bannerImg)=>{
 //close success popup
 const closeSuccessPopup=()=>{
 setSuccessPopupOpen(false);
-navigate('/branch/'+id);
+window.location.reload();
 }
 
 //update item

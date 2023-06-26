@@ -68,6 +68,8 @@ const handleAdd=(event)=>{
 
       setVarificationComponentOpen(true);
       
+    }else{
+      setError("This email address already used");
     }
   })
 }
@@ -80,13 +82,15 @@ const validateEmail = (email) => {
 };
 
 //enter verification code
-//add item
 const send=(code)=>{
   
   
 
   console.warn(code);
-  VerificationService.verify(code).then(res=>{
+  const data={
+    "code":code
+  }
+  VerificationService.verify(data).then(res=>{
     console.warn(res.data);
     if(res.data==true){
     setVarificationComponentOpen(false);
